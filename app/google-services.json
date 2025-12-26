@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "686444005054",
+    "project_id": "alumx-f2386",
+    "storage_bucket": "alumx-f2386.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:686444005054:android:2a4bf7a615653421d8c0ef",
+        "android_client_info": {
+          "package_name": "com.geekhaven.alumx"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBCPXvB6pnR3eXICz6ZEOuVfA6ZsOeiums"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
