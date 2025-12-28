@@ -13,7 +13,7 @@ Thanks to all the amazing people who have contributed to **AlumX's Frontend Repo
 ---
 
 ## 🌱 Contributors
-<!-- Add your name (and GitHub username) below this line -->
+
 
 - Ankit Pal (@icyfire8)
 - Adarsh Yadav (@adrsh2808-creator)
@@ -35,6 +35,8 @@ Thanks to all the amazing people who have contributed to **AlumX's Frontend Repo
 - Sudhanshu (@sahsudhanshu)
 - Rushal Verma (@Rushalverma)
 - Naman Pal (@Naman2251)
+ add-my-name
+- Harshini C (@Hac144)
 - Ashutosh kesarwani (@Lucifer-0612)
 - Hasan Ravda (@hasanravda)
 - Ayush Kumar Rai (@ayu-yishu13)
@@ -43,4 +45,4 @@ Thanks to all the amazing people who have contributed to **AlumX's Frontend Repo
 - Lakshmish (@Coldesy)
 - Rajan Patil (@RajanPatil1904)
 - Apoorv Mittal (@Apoorv012)
-- Mannat Jain (@mannatjain11465-netizen)
+- Mannat Jain (@mannatjain11465-netizen) 
