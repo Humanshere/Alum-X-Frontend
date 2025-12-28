@@ -1,256 +1,331 @@
 package com.geekhaven.alumx.presentation.onboarding
 
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.pager.HorizontalPager
-import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
+import androidx.compose.material3.darkColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.geekhaven.alumx.R
+import kotlinx.coroutines.delay
 
-// --- Design Tokens ---
-val BackgroundDark = Color(0xFF0F1116)
-val PrimaryBlue = Color(0xFF2563EB)
-val TextGrey = Color(0xFF9CA3AF)
-val BorderGrey = Color(0xFF374151)
+val DeepBlueBG = Color(0xFF131924)
+val PrimaryBlue = Color(0xFF175BE5)
+val AppWhite = Color(0xFFFFFFFF)
+val SurfaceColor = Color(0x88212C3D)
 
-// --- Data Model ---
-data class OnboardingPageData(
-    val title: AnnotatedString,
-    val description: String,
-    val imageColor: Color // Simulating different images
+private val OnboardingColorScheme = darkColorScheme(
+    primary = PrimaryBlue,
+    onPrimary = AppWhite,
+    background = DeepBlueBG,
+    onBackground = AppWhite,
+    surface = SurfaceColor,
+    onSurface = AppWhite
 )
 
 @Composable
-fun OnboardingScreen(onGetStarted: () -> Unit) {
-    // defined items dynamically
-    val pages = remember {
-        listOf(
-            OnboardingPageData(
-                title = buildAnnotatedString {
-                    append("Connect. ")
-                    withStyle(style = SpanStyle(color = PrimaryBlue)) { append("Mentor.") }
-                    append(" Grow.")
-                },
-                description = "Join the ultimate alumni network. Access mentorship, blogs, and career tools all in one place.",
-                imageColor = Color(0xFFE0E0E0)
-            ),
-            OnboardingPageData(
-                title = buildAnnotatedString {
-                    append("Network with ")
-                    withStyle(style = SpanStyle(color = PrimaryBlue)) { append("Alumni.") }
-                },
-                description = "Find mentors from your dream companies and get guidance on your career path.",
-                imageColor = Color(0xFFD1D5DB)
-            ),
-            OnboardingPageData(
-                title = buildAnnotatedString {
-                    append("Unlock ")
-                    withStyle(style = SpanStyle(color = PrimaryBlue)) { append("Careers.") }
-                },
-                description = "Get exclusive job referrals and stay updated with the latest industry trends.",
-                imageColor = Color(0xFF9CA3AF)
-            )
-        )
+fun SlidingAutoCarousel(
+    images: List<Int>,
+    currentIndex: Int,
+    onIndexChange: (Int) -> Unit,
+    autoScrollDelay: Long = 2500L
+) {
+    LaunchedEffect(currentIndex) {
+        delay(autoScrollDelay)
+        onIndexChange((currentIndex + 1) % images.size)
     }
 
-    val pagerState = rememberPagerState(pageCount = { pages.size })
+    BoxWithConstraints(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(16.dp))
+            .aspectRatio(1F)
+    ) {
+        val width = maxWidth
 
-    // Auto-scroll logic
-    androidx.compose.runtime.LaunchedEffect(Unit) {
-        while (true) {
-            kotlinx.coroutines.delay(3000)
-            val nextPage = (pagerState.currentPage + 1) % pages.size
-            pagerState.animateScrollToPage(nextPage)
+        images.forEachIndexed { index, image ->
+
+            val targetOffset = when {
+                index < currentIndex -> -width
+                index > currentIndex -> width
+                else -> 0.dp
+            }
+
+            val offsetX by animateDpAsState(
+                targetValue = targetOffset,
+                animationSpec = tween(
+                    durationMillis = 500,
+                    easing = FastOutSlowInEasing
+                ),
+                label = ""
+            )
+
+            Image(
+                painter = painterResource(image),
+                contentDescription = null,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .aspectRatio(1f)
+                    .offset(x = offsetX),
+                contentScale = ContentScale.Crop
+            )
         }
     }
+}
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(BackgroundDark)
-            .padding(24.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        // --- Header (Logo) ---
-        Spacer(modifier = Modifier.height(20.dp))
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center
-        ) {
+@Composable
+fun DotsIndicator(
+    modifier: Modifier = Modifier,
+    total: Int,
+    current: Int
+) {
+    Row(verticalAlignment = Alignment.CenterVertically, modifier = modifier) {
+        repeat(total) { index ->
             Box(
                 modifier = Modifier
-                    .size(32.dp)
-                    .clip(RoundedCornerShape(8.dp))
-                    .background(PrimaryBlue),
-                contentAlignment = Alignment.Center
-            ) {
-                 Box(modifier = Modifier.size(16.dp).background(Color.White, RoundedCornerShape(2.dp)))
-            }
-            Spacer(modifier = Modifier.width(8.dp))
-            Text(
-                text = "AlumX",
-                color = Color.White,
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Bold,
-                letterSpacing = (-0.5).sp
+                    .padding(4.dp)
+                    .size(if (index == current) 8.dp else 6.dp)
+                    .clip(CircleShape)
+                    .background(
+                        if (index == current)
+                            PrimaryBlue
+                        else
+                            Color.LightGray
+                    )
             )
         }
-        
-        Spacer(modifier = Modifier.height(32.dp))
+    }
+}
 
-        Spacer(modifier = Modifier.height(24.dp))
+@Composable
+fun OnBoarding(modifier: Modifier = Modifier, onSignUpButtonClicked: () -> Unit,onLogInButtonClicked: () -> Unit) {
+    OnboardingTheme {
+        OnBoardingContent(modifier,onSignUpButtonClicked,onLogInButtonClicked)
+    }
+}
 
-        // --- Pager Indicators ---
-        Row(
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically
+@Composable
+fun OnboardingTheme(
+    content: @Composable () -> Unit
+) {
+    MaterialTheme(
+        colorScheme = OnboardingColorScheme,
+        typography = MaterialTheme.typography,
+        shapes = MaterialTheme.shapes,
+        content = content
+    )
+}
+
+@Composable
+fun OnBoardingContent(modifier: Modifier = Modifier,
+                      onNextButtonClicked: () -> Unit,
+                      onLogInButtonClicked: () -> Unit
+) {
+    var carouselIndex by remember { mutableIntStateOf(0) }
+
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Spacer(modifier = Modifier.height(50.dp))
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(0.5f),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Top
         ) {
-            repeat(pages.size) { index ->
-                val isSelected = pagerState.currentPage == index
-                val width = if (isSelected) 32.dp else 6.dp
-                val color = if (isSelected) PrimaryBlue else BorderGrey
-
-                Box(
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.logo),
+                    contentDescription = "Logo Image of AlumX",
                     modifier = Modifier
-                        .height(6.dp)
-                        .width(width)
-                        .clip(RoundedCornerShape(3.dp))
-                        .background(color)
+                        .size(48.dp)
+                        .clip(RoundedCornerShape(16.dp))
                 )
-                if (index < pages.size - 1) Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                    modifier = Modifier.padding(8.dp),
+                    text = "AlumX", fontSize = 28.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onBackground
+                )
             }
+            Spacer(modifier = Modifier.height(20.dp))
+            Card(
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .aspectRatio(1f),
+                shape = RoundedCornerShape(24.dp),
+                elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
+            ) {
+                SlidingAutoCarousel(
+                    images = listOf(
+                        R.drawable.placeholder1,
+                        R.drawable.placeholder2,
+                        R.drawable.placeholder3
+                    ),
+                    currentIndex = carouselIndex,
+                    onIndexChange = { carouselIndex = it }
+                )
+
+
+            }
+
         }
 
-        Spacer(modifier = Modifier.height(20.dp))
+        Spacer(modifier = Modifier.height(16.dp))
 
-        // --- Pager Content ---
-        HorizontalPager(
-            state = pagerState,
-            modifier = Modifier.weight(1f)
-        ) { pageIndex ->
-             val pageData = pages[pageIndex]
-             
-             Column(
-                 horizontalAlignment = Alignment.CenterHorizontally,
-                 verticalArrangement = Arrangement.Top,
-                 modifier = Modifier.fillMaxSize()
-             ) {
-                // Image Container (Dynamic)
-                Box(
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(0.5f),
+            shape = RoundedCornerShape(
+                topStart = 24.dp,
+                topEnd = 24.dp,
+                bottomStart = 0.dp,
+                bottomEnd = 0.dp
+            ),
+            colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.surface
+            )
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(8.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                DotsIndicator(
+                    modifier = Modifier.padding(top = 12.dp),
+                    total = 3,
+                    current = carouselIndex
+                )
+
+
+                Text(
+                    text = buildAnnotatedString {
+                        append("Connect. ")
+                        withStyle(style = SpanStyle(color = PrimaryBlue)) {
+                            append("Mentor. ")
+                        }
+                        append("Grow.")
+                    },
+                    fontSize = 31.sp,
+                    fontWeight = FontWeight.Bold,
+                    textAlign = TextAlign.Center
+                )
+                Text(
+                    fontSize = 14.sp,
+                    lineHeight = 20.sp,
+                    modifier = Modifier.padding(start = 32.dp, end = 32.dp),
+                    textAlign = TextAlign.Center,
+                    color = Color.White.copy(alpha = 0.7f),
+                    text = "Join the ultimate alumni network. Access mentorship, blogs, and career tools all in one place."
+                )
+                Button(
+                    onClick = onNextButtonClicked,
+                    shape = RoundedCornerShape(10.dp),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(320.dp)
-                        .clip(RoundedCornerShape(24.dp))
-                        .background(pageData.imageColor) 
+                        .height(64.dp)
+                        .padding(horizontal = 16.dp)
                 ) {
-                     Box(
-                         modifier = Modifier
-                             .fillMaxSize()
-                             .background(Color.Black.copy(alpha=0.1f))
-                     )
+                    Text(
+                        fontSize = 16.sp,
+                        text = "Get Started"
+                    )
+
+                    Icon(
+                        modifier = Modifier.padding(start = 5.dp),
+                        imageVector = Icons.AutoMirrored.Filled.ArrowForward,
+                        contentDescription = "Next"
+                    )
+                }
+                OutlinedButton(
+                    onClick = onLogInButtonClicked,
+                    shape = RoundedCornerShape(10.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(64.dp)
+                        .padding(horizontal = 16.dp)
+                ) {
+                    Text(
+                        fontSize = 16.sp,
+                        text = "Log In",
+                        color = AppWhite
+                    )
+
                 }
 
-                Spacer(modifier = Modifier.height(24.dp))
-                 Text(
-                     text = pageData.title,
-                     color = Color.White,
-                     fontSize = 28.sp,
-                     fontWeight = FontWeight.Bold,
-                     textAlign = TextAlign.Center,
-                     lineHeight = 34.sp
-                 )
-                 
-                 Spacer(modifier = Modifier.height(12.dp))
-                 
-                 Text(
-                     text = pageData.description,
-                     color = TextGrey,
-                     fontSize = 15.sp,
-                     textAlign = TextAlign.Center,
-                     lineHeight = 22.sp
-                 )
-             }
-        }
+                Row {
+                    Text(
+                        text = "By continuing, you accept our ",
+                        fontSize = 12.sp,
+                        color = Color.White.copy(alpha = 0.5f),
+                        textAlign = TextAlign.Center
+                    )
+                    Text(
+                        text = "Terms of Service",
+                        textDecoration = TextDecoration.Underline,
+                        modifier = Modifier.clickable(onClick = {}),
+                        fontSize = 12.sp,
+                        color = Color.White.copy(alpha = 0.5f),
+                        textAlign = TextAlign.Center
+                    )
 
-        // --- Bottom Buttons ---
-        Column(
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Button(
-                onClick = onGetStarted,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(56.dp),
-                shape = RoundedCornerShape(12.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = PrimaryBlue,
-                    contentColor = Color.White
-                )
-            ) {
-                Text(
-                    text = "Get Started",
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.SemiBold
-                )
+                }
             }
-            
-            Spacer(modifier = Modifier.height(12.dp))
-            
-            Button(
-                onClick = onGetStarted,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(56.dp)
-                    .border(1.dp, BorderGrey, RoundedCornerShape(12.dp)),
-                shape = RoundedCornerShape(12.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color.Transparent,
-                    contentColor = Color.White
-                ),
-                elevation = null
-            ) {
-                Text(
-                    text = "Log In",
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.SemiBold
-                )
-            }
-            
-             Spacer(modifier = Modifier.height(16.dp))
-             
-             Text(
-                 text = "By continuing, you accept our Terms of Service",
-                 color = Color(0xFF6B7280),
-                 fontSize = 12.sp,
-                 textAlign = TextAlign.Center
-             )
         }
     }
 }

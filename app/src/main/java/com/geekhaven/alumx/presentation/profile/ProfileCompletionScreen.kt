@@ -14,6 +14,7 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -67,6 +68,21 @@ fun ProfileCompletionScreen() {
             Text("Profile Strength", color = Color.Gray)
             Spacer(Modifier.weight(1f))
             Text("75% Complete", color = blue)
+        }
+
+        FlowRow(
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            interests.forEach { interest ->
+                SelectableChip(
+                    text = interest,
+                    selected = selectedInterests.contains(interest),
+                    onClick = {
+                        if (selectedInterests.contains(interest)) selectedInterests.remove(interest) else selectedInterests.add(interest)
+                    }
+                )
+            }
         }
 
         LinearProgressIndicator(
@@ -207,17 +223,7 @@ fun ProfileCompletionScreen() {
 
         SectionTitle("Interests")
 
-        FlowRow(
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            interests.forEach
-            {
-                SelectableChip(text = it, selected = selectedInterests.contains(it), onClick = {
-                    if (selectedInterests.contains(it)) selectedInterests.remove(it) else selectedInterests.add(it)
-                })
-            }
-        }
+
 
         Spacer(Modifier.height(24.dp))
 

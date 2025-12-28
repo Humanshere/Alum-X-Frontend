@@ -16,6 +16,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.geekhaven.alumx.presentation.auth.login.LoginScreen
 import com.geekhaven.alumx.presentation.auth.register.RegisterScreen
+import com.geekhaven.alumx.presentation.onboarding.OnBoarding
 import com.geekhaven.alumx.ui.theme.AlumXTheme
 
 
@@ -48,7 +49,8 @@ fun AlumXApp(modifier: Modifier = Modifier) {
             modifier = Modifier.padding(innerPadding)
         ) {
             composable(route = AlumXScreen.OnBoarding.name) {
-                OnBoarding(modifier = Modifier.fillMaxSize(),
+                OnBoarding(
+                    modifier = Modifier.fillMaxSize(),
                     onSignUpButtonClicked = {
                         navController.navigate(AlumXScreen.Register.name)
                     },

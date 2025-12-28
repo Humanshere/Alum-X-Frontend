@@ -25,7 +25,7 @@ private val BorderGrey = Color(0xFF374151)
 @Composable
 fun SocialButton(
     text: String,
-    icon: ImageVector, // In real app, might use painterResource
+    icon: ImageVector,
     iconTint: Color,
     onClick: () -> Unit,
     modifier: Modifier = Modifier
@@ -33,7 +33,7 @@ fun SocialButton(
     Button(
         onClick = onClick,
         modifier = modifier
-            .fillMaxWidth() // Usually used in Row with weight(1f)
+            .fillMaxWidth()
             .height(50.dp),
         shape = RoundedCornerShape(12.dp),
         colors = ButtonDefaults.buttonColors(

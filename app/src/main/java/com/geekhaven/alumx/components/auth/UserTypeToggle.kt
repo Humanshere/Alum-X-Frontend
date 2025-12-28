@@ -26,8 +26,7 @@ fun UserTypeToggle(
     selected: UserType,
     onSelect: (UserType) -> Unit
 ) {
-    Column() {
-
+    Column {
         Text(
             modifier = Modifier.padding(start = 5.dp),
             fontSize = 14.sp,

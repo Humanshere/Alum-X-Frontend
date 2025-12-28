@@ -4,7 +4,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.*
@@ -23,7 +23,6 @@ import com.geekhaven.alumx.components.auth.SubmitButton
 import com.geekhaven.alumx.components.auth.TextInputComponent
 import com.geekhaven.alumx.ui.theme.PrimaryBlue
 import com.geekhaven.alumx.R
-
 
 @Composable
 fun LoginScreen(
@@ -63,7 +62,7 @@ fun LoginScreen(
                 "*********"
             )
             Spacer(Modifier.height(6.dp))
-            SubmitButton("Login", Icons.Filled.ArrowForward)
+            SubmitButton("Login", Icons.AutoMirrored.Filled.ArrowForward)
 
             Text(
                 fontSize = 14.sp,
@@ -90,7 +89,7 @@ fun LoginScreen(
                 )
             }
 
-            Row() {
+            Row {
                 Text(
                     text = "Don't have an account? ",
                     fontSize = 12.sp,
@@ -109,11 +108,3 @@ fun LoginScreen(
         }
     }
 }
-
-//@Preview
-//@Composable
-//fun LoginScreenPreview(){
-//    AlumXTheme() {
-//        LoginScreen()
-//    }
-//}

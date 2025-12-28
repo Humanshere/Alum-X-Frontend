@@ -6,7 +6,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 
 class LoginViewModel : ViewModel() {
-
     private val _uiState = MutableStateFlow(LoginUiState())
     val uiState: StateFlow<LoginUiState> = _uiState
 
@@ -17,6 +16,4 @@ class LoginViewModel : ViewModel() {
     fun onPasswordChange(password: String) {
         _uiState.update { it.copy(password = password) }
     }
-
-
 }

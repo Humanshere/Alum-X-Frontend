@@ -15,7 +15,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
-// Design Tokens (reused)
 private val BackgroundDark = Color(0xFF0F1116)
 private val InputBackground = Color(0xFF1F2937)
 private val TextGrey = Color(0xFF9CA3AF)
@@ -24,6 +23,7 @@ private val PrimaryBlue = Color(0xFF2563EB)
 
 @Composable
 fun AuthTextField(
+    modifier: Modifier = Modifier,
     value: String,
     onValueChange: (String) -> Unit,
     label: String,
@@ -32,7 +32,6 @@ fun AuthTextField(
     trailingIcon: @Composable (() -> Unit)? = null,
     isError: Boolean = false,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
-    modifier: Modifier = Modifier
 ) {
     androidx.compose.foundation.layout.Column(
         modifier = modifier.fillMaxWidth()

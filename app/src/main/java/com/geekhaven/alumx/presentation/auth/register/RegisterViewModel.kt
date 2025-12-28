@@ -6,7 +6,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 
 class RegisterViewModel : ViewModel() {
-
     private val _uiState = MutableStateFlow(RegisterUiState())
     val uiState: StateFlow<RegisterUiState> = _uiState
 
@@ -31,6 +30,4 @@ class RegisterViewModel : ViewModel() {
     fun onUserTypeChange(type: UserType) {
         _uiState.update { it.copy(userType = type) }
     }
-
-
 }
