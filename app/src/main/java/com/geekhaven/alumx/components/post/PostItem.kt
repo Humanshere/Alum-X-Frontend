@@ -17,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -51,6 +52,8 @@ fun PostItem(
         elevation = CardDefaults.cardElevation(4.dp)
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
+
+            // Author Info Row
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Image(
                     painter = painterResource(id = profileRes),
@@ -58,10 +61,11 @@ fun PostItem(
                     modifier = Modifier
                         .size(42.dp)
                         .clip(CircleShape),
-                    contentScale = androidx.compose.ui.layout.ContentScale.Crop
+                    contentScale = ContentScale.Crop
                 )
 
                 Spacer(modifier = Modifier.width(10.dp))
+
                 Column {
                     Text(
                         text = authorName,
@@ -75,6 +79,7 @@ fun PostItem(
                         color = subTextColor
                     )
                 }
+
                 Spacer(modifier = Modifier.weight(1f))
 
                 Text(
@@ -83,8 +88,10 @@ fun PostItem(
                     color = subTextColor
                 )
             }
+
             Spacer(modifier = Modifier.height(10.dp))
 
+            // Post Text
             Text(
                 text = postText,
                 maxLines = 3,
@@ -96,17 +103,20 @@ fun PostItem(
 
             Spacer(modifier = Modifier.height(10.dp))
 
+            // Post Image
             Image(
                 painter = painterResource(id = imageRes),
                 contentDescription = placeName,
-                contentScale = androidx.compose.ui.layout.ContentScale.Crop,
+                contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(180.dp)
                     .clip(RoundedCornerShape(12.dp))
             )
+
             Spacer(modifier = Modifier.height(10.dp))
 
+            // Likes, Comments, Reposts Row
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
@@ -129,11 +139,13 @@ fun PostItem(
                     Text("$reposts", color = subTextColor)
                 }
             }
+
             Divider(
                 modifier = Modifier.padding(vertical = 12.dp),
                 color = Color(0xFF2B3240)
             )
 
+            // Action Buttons
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceAround
@@ -142,33 +154,23 @@ fun PostItem(
                 Icon(Icons.Default.Email, contentDescription = "Comment", tint = subTextColor)
                 Icon(Icons.Default.Refresh, contentDescription = "Repost", tint = subTextColor)
                 Icon(Icons.Default.Share, contentDescription = "Share", tint = subTextColor)
-
             }
-          }
+        }
     }
 }
 
-@Preview(showBackground = true, backgroundColor = 0xFF0B1220)
+@Preview(showBackground = true)
 @Composable
 fun PostItemPreview() {
-    MaterialTheme {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Color(0xFF0B1220))
-                .padding(vertical = 20.dp)
-        ) {
-            PostItem(
-                authorName = "Harsh",
-                authorDescription = "Travel Blogger",
-                postText = "Exploring Hội An, Quảng Nam, Vietnam. Beautiful streets, lanterns, and riverside views!",
-                likes = 120,
-                comments = 32,
-                reposts = 14,
-                placeName = "Hội An, Vietnam",
-                imageRes = R.drawable.hoi_an,
-                profileRes = R.drawable.sk_ic
-            )
-        }
-    }
+    PostItem(
+        authorName = "Harsh",
+        authorDescription = "Travel Blogger",
+        postText = "Exploring Hội An, Quảng Nam, Vietnam. Beautiful streets, lanterns, and riverside views!",
+        likes = 120,
+        comments = 32,
+        reposts = 14,
+        placeName = "Hội An, Vietnam",
+        imageRes = R.drawable.hoi_an,
+        profileRes = R.drawable.sk_ic
+    )
 }

@@ -31,6 +31,7 @@ fun ProfileCompletionScreen() {
     val blue = Color(0xFF1E6BFF)
     val cardBg = Color(0xFF141C2F)
 
+    // Form States
     var graduationYear by remember { mutableStateOf("") }
     var branch by remember { mutableStateOf("") }
     var currentRole by remember { mutableStateOf("") }
@@ -50,6 +51,7 @@ fun ProfileCompletionScreen() {
             .padding(16.dp)
     ) {
 
+        /* ---------- TOP BAR ---------- */
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.fillMaxWidth()
@@ -63,6 +65,7 @@ fun ProfileCompletionScreen() {
 
         Spacer(Modifier.height(20.dp))
 
+        /* ---------- PROFILE STRENGTH ---------- */
         Row(Modifier.fillMaxWidth()) {
             Text("Profile Strength", color = Color.Gray)
             Spacer(Modifier.weight(1f))
@@ -70,7 +73,7 @@ fun ProfileCompletionScreen() {
         }
 
         LinearProgressIndicator(
-            progress = 0.75f,
+            progress = { 0.75f },
             color = blue,
             trackColor = Color.DarkGray,
             modifier = Modifier
@@ -81,6 +84,7 @@ fun ProfileCompletionScreen() {
 
         Spacer(Modifier.height(24.dp))
 
+        /* ---------- TITLE ---------- */
         Text(
             "Let's finish your profile.",
             color = Color.White,
@@ -96,6 +100,7 @@ fun ProfileCompletionScreen() {
 
         Spacer(Modifier.height(28.dp))
 
+        /* ---------- PROFILE PHOTO ---------- */
         Column(
             modifier = Modifier.fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally
@@ -107,11 +112,13 @@ fun ProfileCompletionScreen() {
                     modifier = Modifier
                         .size(100.dp)
                         .clip(CircleShape)
-                        .background(Color(0xFFE0C4A6)),
+                        .background(Color(0xFFE0C4A6)), // Placeholder skin tone/image
                     contentAlignment = Alignment.Center
                 ) {
+                    // Placeholder for actual image
                 }
 
+                // Camera Icon Badge
                 Box(
                     modifier = Modifier
                         .size(32.dp)
@@ -128,6 +135,7 @@ fun ProfileCompletionScreen() {
 
         Spacer(Modifier.height(32.dp))
 
+        /* ---------- FORM FIELDS ---------- */
         ProfileTextField(graduationYear, { graduationYear = it }, "Graduation Year", "e.g. 2024")
         Spacer(Modifier.height(16.dp))
 
@@ -144,6 +152,7 @@ fun ProfileCompletionScreen() {
 
         Spacer(Modifier.height(24.dp))
 
+        /* ---------- SKILLS ---------- */
         SectionTitle("Skills", "Add at least 3")
 
         OutlinedTextField(
@@ -179,6 +188,7 @@ fun ProfileCompletionScreen() {
             }
         )
 
+        @OptIn(ExperimentalLayoutApi::class)
         FlowRow(
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)
@@ -186,7 +196,7 @@ fun ProfileCompletionScreen() {
             skills.forEach { skill ->
                 RemovableChip(text = skill, onRemove = { skills.remove(skill) })
             }
-
+            // Add Skill Chip (Static)
             Box(
                 modifier = Modifier
                     .background(Color(0xFF1C2333), RoundedCornerShape(20.dp))
@@ -205,22 +215,32 @@ fun ProfileCompletionScreen() {
 
         Spacer(Modifier.height(24.dp))
 
+        /* ---------- INTERESTS ---------- */
         SectionTitle("Interests")
 
+        @OptIn(ExperimentalLayoutApi::class)
         FlowRow(
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            interests.forEach
-            {
-                SelectableChip(text = it, selected = selectedInterests.contains(it), onClick = {
-                    if (selectedInterests.contains(it)) selectedInterests.remove(it) else selectedInterests.add(it)
-                })
+            interests.forEach { interest ->
+                SelectableChip(
+                    text = interest,
+                    selected = selectedInterests.contains(interest),
+                    onClick = {
+                        if (selectedInterests.contains(interest)) {
+                            selectedInterests.remove(interest)
+                        } else {
+                            selectedInterests.add(interest)
+                        }
+                    }
+                )
             }
         }
 
         Spacer(Modifier.height(24.dp))
 
+        /* ---------- EXPERIENCE ---------- */
         Text("Experience", color = Color.White, fontWeight = FontWeight.SemiBold)
 
         Spacer(Modifier.height(12.dp))
@@ -234,6 +254,7 @@ fun ProfileCompletionScreen() {
                 modifier = Modifier.padding(16.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
+                // Logo Placeholder
                 Box(
                     modifier = Modifier
                         .size(48.dp)
@@ -271,6 +292,7 @@ fun ProfileCompletionScreen() {
 
         Spacer(Modifier.height(32.dp))
 
+        /* ---------- COMPLETE BUTTON ---------- */
         Button(
             onClick = {},
             modifier = Modifier
@@ -285,6 +307,8 @@ fun ProfileCompletionScreen() {
         Spacer(Modifier.height(20.dp))
     }
 }
+
+/* ---------- REUSABLE COMPONENTS ---------- */
 
 @Composable
 fun ProfileTextField(
@@ -335,7 +359,7 @@ fun SectionTitle(title: String, action: String? = null) {
 @Composable
 fun RemovableChip(text: String, onRemove: () -> Unit) {
     Surface(
-        color = Color(0xFF141C2F),
+        color = Color(0xFF141C2F), // Darker blue/bg
         shape = RoundedCornerShape(20.dp),
         border = BorderStroke(1.dp, Color(0xFF1E6BFF)),
         modifier = Modifier.height(32.dp)
